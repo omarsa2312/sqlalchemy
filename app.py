@@ -1,4 +1,5 @@
 import random
+from sqlalchemy import or_
 from sqlalchemy.orm import sessionmaker
 from models import User, engine
 
@@ -69,7 +70,27 @@ session = Session()
 # session.commit()
 
 # query all users by age (by default it is ascending order)
-users = session.query(User).order_by(User.age.desc(), User.name).all()
+# users = session.query(User).order_by(User.age.desc(), User.name).all()
 
-for user in users: 
-    print(f"{user.age} {user.name}")
+# for user in users: 
+#     print(f"{user.age} {user.name}")
+
+
+all_users = session.query(User).all()
+print(f"All users {len(all_users)}")
+
+# Filter the users with age less than 25
+# filtered_users = session.query(User).filter(User.age < 25, User.name == 'Rahul').all()
+# print(f"Filtered users {len(filtered_users)}")
+
+# important to note here is that filter_by is also a method to filter
+# but filter_by does not supports conditionals, so we go by filter always
+# where method is also there but it is a copy of filter method
+
+# the comma separated conditions that we provide in the filter method
+# follow the and condition. If we want or condition to be followed, we can wrap the conditions in or_ method
+# filtered_users = session.query(User).filter(or_(User.age < 25, User.name == 'Rahul')).all()
+# print(f"Filtered users {len(filtered_users)}")
+
+# If we want or condition then we can also use the '|' operator present in python for the same
+# similarly we have and_, and bitwise and not_
